@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dados do LIDAR</title>
+</head>
+<body>
+    <h1>Dados do LIDAR</h1>
+    <canvas id="lidarCanvas" width="600" height="600"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        var ctx = document.getElementById('lidarCanvas').getContext('2d');
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        var lidarChart = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'LIDAR Data',
+                    data: []
+                }]
+            },
+            options: {
+                scales: {
+                    x: { type: 'linear', position: 'bottom' },
+                    y: { type: 'linear' }
+                }
+            }
+        });
+
+        socket.on('lidar_data', function(data) {
+            lidarChart.data.datasets[0].data.push({x: data.x, y: data.y});
+            lidarChart.update();
+        });
+    </script>
+</body>
+</html>
