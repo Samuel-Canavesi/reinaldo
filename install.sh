@@ -11,10 +11,6 @@ sudo apt-get install python3 python3-pip hostapd dnsmasq -y
 # Lib python
 sudo pip install -r requirements.txt
 
-echo "Copiando scripts e concedendo permissao..."
-sudo cp -r . /usr/local/bin/
-sudo chmod 777 /usr/local/bin/*.sh
-
 WIFI=/etc/systemd/system/wifi_monitor.service
 echo "Criando arquivo de serviço de conexão internet"
 sudo bash -c "cat > $WIFI <<EOF
@@ -23,7 +19,7 @@ Description=Internet connection
 After=multi-user.target
 
 [Service]
-ExecStart=/usr/bin/python3 /usr/local/bin/serv_config/verify.py
+ExecStart=/usr/bin/python3 /home/pi/reinaldo/serv_config/verify.py
 Restart=on-abort
 
 [Install]
@@ -38,7 +34,7 @@ Description=web visualisation
 After=multi-user.target
 
 [Service]
-ExecStart=/usr/bin/python3 /usr/local/bin/serv_config/app.py
+ExecStart=/usr/bin/python3 /home/pi/reinaldo/serv_config/app.py
 Restart=on-abort
 
 [Install]
